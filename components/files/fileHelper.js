@@ -3,6 +3,12 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const parser = require('xml2json');
 
+function transformStringDate(date) {
+    const dates = date.split('/');
+    [dates[0], dates[1]] = [dates[1], dates[0]];
+    return dates.join('/');
+}
+
 const parseHandleList = {
     csv(file) {
         return new Promise((resolve, reject) => {
@@ -10,6 +16,9 @@ const parseHandleList = {
             fs.createReadStream(file.filepath)
                 .pipe(csv(['transactionId', 'amount', 'currencyCode', 'transactionDate', 'status']))
                 .on('data', function (row) {
+                    if(row.transactionDate) {
+                        row.transactionDate = transformStringDate(row.transactionDate);
+                    }
                     transactions.push(row);
                 })
                 .on('end', function () {
@@ -63,7 +72,6 @@ async function parseTransactionFromFile(file) {
         }
     };
     const transactions = await parseHandle(file);
-    console.log(transactions);
     
     const invalidRecord = validateTransaction(transactions);
     if (invalidRecord.length > 0) {

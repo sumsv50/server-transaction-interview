@@ -7,6 +7,7 @@ const logger = require('morgan');
 
 const fileRouter = require('./components/files/fileRouter');
 const fileRouterApi = require('./components/files/fileRouterApi');
+const transactionRouterApi = require('./components/transactions/transactionRouterApi');
 const usersRouter = require('./routes/users');
 const db = require('./configs/mongoose');
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/file', fileRouter);
 app.use('/api/file', fileRouterApi);
 app.use('/users', usersRouter);
+app.use('/api/transactions', transactionRouterApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

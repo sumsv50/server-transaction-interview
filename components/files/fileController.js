@@ -15,7 +15,6 @@ class fileController {
                 res.status(400).json(result);
                 return;
             }
-            console.log(result.transactions);
             await fileService.saveTransactions(result.transactions);
             res.json({
                 isSuccess: true
