@@ -1,0 +1,34 @@
+<h1>Server Transaction Data</h1>
+<input class="ip-file" name="file" type="file" accept=".csv, .xml"/>
+<button class="btn-send-file">Send file</button>
+<br>
+<span style="margin-top: 20px; display: inline-block" class="msg-result"></span>
+
+<script>
+    const fileUpload = document.querySelector(".ip-file");
+    const btnSendFile = document.querySelector(".btn-send-file");
+    const msgResult = document.querySelector(".msg-result");
+
+
+    btnSendFile.addEventListener('click', () => {
+        const formData = new FormData();
+        formData.append('file', fileUpload.files[0]);
+        fetch('/api/file/upload-file', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.isSuccess) {
+                msgResult.innerHTML = '<span style="color: blue">Insert transactions successfully!';
+            } else {
+                msgResult.innerHTML = `<span style="color: red">${json.errorMessage}</span>`;
+            }
+        });
+    })
+
+    fileUpload.addEventListener('change', () => {
+        msgResult.innerHTML="";
+    })
+
+</script>
